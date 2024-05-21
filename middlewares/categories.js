@@ -19,9 +19,6 @@ const findCategoryById = async (req, res, next) => {
   }
 };
 
-
-
-// middlewares/categories.js
 const createCategory = async (req, res, next) => {
     console.log("POST /categories");
     try {
@@ -33,7 +30,6 @@ const createCategory = async (req, res, next) => {
           res.status(400).send(JSON.stringify({ message: "Ошибка создания категории" }));
     }
   };
-
 
   const updateCategory = async (req, res, next) => {
     console.log("PUT /categories/:id");
@@ -47,13 +43,30 @@ const createCategory = async (req, res, next) => {
     }
   };
 
-  const checkEmptyName= async (req,res,next)=>{
-      if (!req.body.name){
-        res.status(400).send(JSON.stringify({ message: "Введите название категории" }));
-      }else{
-        next();
-      }
+  
+  const checkIsCategoryExists = async (req, res, next) => {
+    // Среди существующих в базе категорий пытаемся найти категорию с тем же именем,
+    // с которым хотим создать новую категорию
+    const isInArray = req.categoriesArray.find((category) => {
+      return req.body.name === category.name;
+    });
+    // Если нашли совпадение, то отвечаем кодом 400 и сообщением
+    if (isInArray) {
+      res.setHeader("Content-Type", "application/json");
+          res.status(400).send(JSON.stringify({ message: "Категория с таким названием уже существует" }));
+    } else {
+    // Если категория, которую хотим создать, действительно новая, то передаём управление дальше
+      next();
+    }
   };
+
+  const checkEmptyName= async (req,res,next)=>{
+    if (!req.body.name){
+      res.status(400).send(JSON.stringify({ message: "Введите название категории" }));
+    }else{
+      next();
+    }
+};
 
   const deleteCategory = async (req, res, next) => {
     console.log("DELETE /categories/:id");
@@ -68,9 +81,10 @@ const createCategory = async (req, res, next) => {
 
 module.exports = {
     findAllCategories,
-    createCategory,
     findCategoryById,
+    createCategory,
     updateCategory,
+    checkIsCategoryExists,
     checkEmptyName,
     deleteCategory
 };
