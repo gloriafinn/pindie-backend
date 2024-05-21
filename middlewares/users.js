@@ -45,9 +45,20 @@ const createUser = async (req, res, next) => {
     }
   };
 
+  const checkEmptyNameAndEmailAndPassword = async (req, res, next) => {
+    if (!req.body.username || !req.body.email || !req.body.password) {
+      res.setHeader("Content-Type", "application/json");
+          res.status(400).send(JSON.stringify({ message: "Введите имя, email и пароль" }));
+    } else {
+      next();
+    }
+  };
+
+
 module.exports = {
     findAllUsers,
     createUser,
     findUserById,
-    updateUser
+    updateUser,
+    checkEmptyNameAndEmailAndPassword
 };
