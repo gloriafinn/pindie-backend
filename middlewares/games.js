@@ -55,7 +55,16 @@ const updateGame = async (req, res, next) => {
   }
 };
 
-
+const deleteGame = async (req, res, next) => {
+  console.log("DELETE /games/:id");
+  try {
+    // Методом findByIdAndDelete по id находим и удаляем документ из базы данных
+    req.game = await games.findByIdAndDelete(req.params.id);
+    next();
+  } catch (error) {
+    res.status(400).send({ message: "Ошибка удаления игры" });
+  }
+};
 
 
 // Экспортируем функцию поиска всех игр
@@ -63,5 +72,6 @@ module.exports = {
   findAllGames, 
   createGame,
   findGameById,
-  updateGame
+  updateGame,
+  deleteGame
 };
