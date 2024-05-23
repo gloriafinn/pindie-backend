@@ -1,9 +1,27 @@
 const usersRouter=require("express").Router();
 
-const {findAllUsers, createUser, updateUser, checkEmptyNameAndEmailAndPassword,checkIsUserExists,checkEmptyNameAndEmail, deleteUser}=require('../middlewares/users');
-const {sendAllUsers, sendUserCreated, sendUserUpdated,sendUserDeleted}=require('../controllers/users');
+const {
+  findAllUsers, 
+  createUser, 
+  updateUser, 
+  checkEmptyNameAndEmailAndPassword,
+  checkIsUserExists,
+  checkEmptyNameAndEmail, 
+  deleteUser,
+  hashPassword
+}=require('../middlewares/users');
 
-usersRouter.get("/users",findAllUsers,sendAllUsers);
+const {
+  sendAllUsers, 
+  sendUserCreated, 
+  sendUserUpdated,
+  sendUserDeleted
+}=require('../controllers/users');
+
+usersRouter.get(
+  "/users",
+  findAllUsers,
+  sendAllUsers);
 
 
 usersRouter.post(
@@ -11,6 +29,7 @@ usersRouter.post(
   findAllUsers,
   checkIsUserExists,
   checkEmptyNameAndEmailAndPassword,
+  hashPassword,
   createUser,
   sendUserCreated
 );
@@ -22,6 +41,9 @@ usersRouter.put(
   sendUserUpdated
 );
 
-usersRouter.delete("/users/:id", deleteUser, sendUserDeleted);
+usersRouter.delete(
+  "/users/:id", 
+  deleteUser, 
+  sendUserDeleted);
 
 module.exports=usersRouter;
