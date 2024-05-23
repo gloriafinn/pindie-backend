@@ -1,10 +1,12 @@
 const users = require('../models/user');
+const bcrypt = require('bcryptjs');
+
+
 
 const findAllUsers = async (req, res, next)=>{
     req.usersArray = await users.find({});
     next();
 };
-
 
 const findUserById = async (req, res, next) => {
   console.log("GET /users/:id");
@@ -84,6 +86,23 @@ const createUser = async (req, res, next) => {
     }
   }; 
 
+  const hashPassword=async (req,res,next)=>{
+    try {
+      //Создаем соль
+      const salt=await bcrypt.genSalt(10);
+      //Хешируем пароль
+      const hash=await bcrypt.hash(req.body.password, salt);
+      //Меняем пароль на хэш
+      req.body.password=hash;
+      next();
+    }catch (error){
+      console.log(error);
+      res.setHeader("Content-Type", "application/json");
+      res.status(400).send(JSON.stringify({ message: "Error hash"}));
+    };
+
+  };
+
 module.exports = {
     findAllUsers,
     findUserById,
@@ -92,5 +111,6 @@ module.exports = {
     checkIsUserExists,
     checkEmptyNameAndEmailAndPassword,
     checkEmptyNameAndEmail,
-    deleteUser
+    deleteUser,
+    hashPassword
 };
