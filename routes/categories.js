@@ -2,12 +2,27 @@
 const categoriesRouter=require("express").Router();
 
 // Импортируем вспомогательные функции
-const {findAllCategories, createCategory, updateCategory, checkEmptyName, deleteCategory,  checkIsCategoryExists}=require('../middlewares/categories');
-const {sendAllCategories, sendCategoryCreated, sendCategoryUpdated, sendCategoryDeleted}=require('../controllers/categories');
+const {
+  findAllCategories, 
+  createCategory, 
+  updateCategory, 
+  checkEmptyName, 
+  deleteCategory,  
+  checkIsCategoryExists
+}=require('../middlewares/categories');
+const {
+  sendAllCategories, 
+  sendCategoryCreated, 
+  sendCategoryUpdated, 
+  sendCategoryDeleted
+}=require('../controllers/categories');
 
 // Обрабатываем GET-запрос с роутом '/categories'
-categoriesRouter.get("/categories",findAllCategories,sendAllCategories);
-// routes/categories.js
+categoriesRouter.get(
+  "/categories",
+  findAllCategories,
+  sendAllCategories);
+
 categoriesRouter.post(
   "/categories",
   findAllCategories,
@@ -24,7 +39,10 @@ categoriesRouter.put(
   sendCategoryUpdated
 );
 
-  categoriesRouter.delete("/categories/:id", deleteCategory, sendCategoryDeleted);
+  categoriesRouter.delete(
+    "/categories/:id", 
+    deleteCategory, 
+    sendCategoryDeleted);
   
 // Экспортируем роут для использования в приложении — app.js
 module.exports=categoriesRouter;
