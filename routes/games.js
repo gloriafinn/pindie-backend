@@ -1,15 +1,34 @@
 const gamesRouter=require("express").Router();
+const { checkAuth } = require("../middlewares/auth");
 
-const {findAllGames, createGame, findGameById, updateGame, checkIfUsersAreSafe,checkIfCategoriesAvaliable, checkEmptyFields, checkIsGameExists, deleteGame}=require('../middlewares/games');
-const {sendAllGames, sendGameCreated, sendGameUpdated,  sendGameDeleted}=require('../controllers/games');
+const {
+  findAllGames, 
+  createGame, 
+  findGameById, 
+  updateGame, 
+  checkIfUsersAreSafe,
+  checkIfCategoriesAvaliable, 
+  checkEmptyFields, 
+  checkIsGameExists, 
+  deleteGame}=require('../middlewares/games');
+const {
+  sendAllGames, 
+  sendGameCreated, 
+  sendGameUpdated,  
+  sendGameDeleted}=require('../controllers/games');
 
-gamesRouter.get("/games", findAllGames, sendAllGames);
+gamesRouter.get(
+  "/games", 
+  findAllGames, 
+  sendAllGames);
+
 gamesRouter.post(
   "/games",
   findAllGames,
   checkIsGameExists,
   checkIfCategoriesAvaliable,
   checkEmptyFields,
+  checkAuth,
   createGame,
   sendGameCreated
 );
@@ -20,12 +39,14 @@ gamesRouter.put(
   checkIfUsersAreSafe,
   checkIfCategoriesAvaliable,
   checkEmptyFields,
+  checkAuth,
   updateGame,
   sendGameUpdated
 );
 
   gamesRouter.delete(
     "/games/:id", // Слушаем запросы по эндпоинту
+    checkAuth, 
     deleteGame,
     sendGameDeleted // Тут будут функция удаления элементов из MongoDB и ответ клиенту
   ); 
