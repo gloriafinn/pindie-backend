@@ -14,7 +14,7 @@ const PORT = 3000;
 connectToDatabase();
 
 app.use(
-  cors,
+  cors,//
   cookieParser(), // Добавляем миддлвар для работы с куки
   bodyParser.json(),
   pagesRouter, // Добавляем роутер для страниц

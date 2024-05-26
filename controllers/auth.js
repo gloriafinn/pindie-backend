@@ -7,14 +7,16 @@ const sendIndex = (req, res) => {
   if (req.cookies.jwt) {
     try {
       jwt.verify(req.cookies.jwt, "my-vm-key");
-      return res.sendFile(
-        path.join(__dirname, "../public/admin/dashboard.html")
-      );
+      return res.redirect("/admin/dashboard");
     } catch (err) {
       res.sendFile(path.join(__dirname, "../public/index.html"));
     }
   }
   res.sendFile(path.join(__dirname, "../public/index.html"));
+};
+
+const sendDashboard = (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/admin/dashboard.html"));
 };
 
 const login= (req,res)=>{
@@ -38,4 +40,4 @@ const login= (req,res)=>{
         });
     };
 
-    module.exports={ login, sendIndex};
+    module.exports={ login, sendIndex, sendDashboard };
