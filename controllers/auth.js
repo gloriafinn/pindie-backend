@@ -30,7 +30,7 @@ const login= (req,res)=>{
             });
             return { user, token };
         })
-        .then((user,token)=>{
+        .then(({user,token})=>{
             res
             .status(200)
             .send({_id: user._id, username: user.username, email: user.email, jwt: token})      
